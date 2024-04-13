@@ -1,0 +1,177 @@
+.stacking {
+  display: grid;
+  grid-template-areas: 'stack';
+}
+
+.stacking>* {
+  grid-area: stack;
+}
+
+/****************************************/
+
+:root {
+  --primary: #eee;
+  --primary-contrast: #1c1c1c;
+  --card-height: 60px;
+  --card-width: calc(var(--card-height) * 0.666);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  padding: 32px 0;
+  color: var(--primary);
+  background-color: var(--primary-contrast);
+}
+
+main {
+  margin: 0 auto;
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  font-family: monospace;
+  font-size: 16px;
+}
+
+button {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #888;
+  border-radius: 10px;
+  background: var(--primary-contrast);
+  color: var(--primary);
+  font-size: larger;
+}
+
+button:enabled:hover {
+  border-color: var(--primary);
+  cursor: pointer;
+}
+
+button:enabled:active {
+  opacity: 0.7;
+}
+
+button:disabled {
+  opacity: 0.6;
+}
+
+input {
+  padding: 3px 8px;
+}
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+}
+
+.card-container {
+  display: flex;
+  gap: 14px;
+}
+
+.card {
+  width: var(--card-width);
+  height: var(--card-height);
+  text-align: center;
+  line-height: var(--card-height);
+  user-select: none;
+  border: 1px solid var(--primary);
+  background-color: #222;
+  box-shadow: 2px 2px #8886;
+}
+
+.card.selected:not([disabled]),
+.card.selectable:not([disabled]):hover {
+  cursor: pointer;
+  color: var(--primary-contrast);
+  background-color: var(--primary);
+  border-color: var(--primary-contrast);
+}
+
+.card[disabled] {
+  opacity: 0.4;
+}
+
+.card-placeholder {
+  width: var(--card-width);
+  height: var(--card-height);
+  border: 1px dashed #888;
+}
+
+.player-list {
+  margin: 60px;
+  display: grid;
+  /* Width of the outer columns doesn't matter; they just need to be equal. The content will overflow. */
+  grid-template-columns: 50px 50px;
+  column-gap: 150px;
+  row-gap: 30px;
+}
+
+.player-list .player-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 20px;
+}
+
+.player-list .player-container:nth-child(2n) {
+  flex-direction: row-reverse;
+}
+
+.player-list .player-container>* {
+  flex-shrink: 0;
+}
+
+.player-list .player-container .username {
+  white-space: nowrap;
+}
+
+.center-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.center-area .result-text {
+  font-weight: bold;
+  font-size: 20px;
+  height: 24px;
+}
+
+.hover-checkmark::before {
+  content: "☐";
+}
+
+.hover-checkmark:enabled:hover::before {
+  content: "☑";
+}
+
+/****************************************/
+
+.loading>* {
+  opacity: 0;
+}
+
+.loading::before {
+  content: '...';
+}
+
+.hidden {
+  display: none;
+}
+
+.invisible {
+  visibility: hidden;
+}
