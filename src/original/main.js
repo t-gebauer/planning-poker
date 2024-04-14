@@ -186,7 +186,6 @@ async function fetchStatus(counter) {
           clearButton.classList.remove('hidden');
           clearButton.setAttribute('disabled', '');
           window.setTimeout(() => {
-            clearButton.classList.remove('locked');
             clearButton.removeAttribute('disabled');
           }, 1000)
         }

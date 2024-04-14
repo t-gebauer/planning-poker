@@ -358,6 +358,58 @@ function RedirectHttp()
   return false
 end
 
+local skinPathMap = {
+  original = {
+    ["/"] = "original/index.html",
+    ["/main.js"] = "original/main.js",
+  },
+  hyperapp = {
+    ["/"] = "hyperapp/index.html",
+    ["/main.mjs"] = "hyperapp/main.mjs",
+    ["/hyperapp.js"] = "hyperapp/hyperapp-2.0.22.js",
+  },
+}
+
+function ServeFrontend(path)
+  if toSet({
+    "/favicon.ico",
+    "/main.css",
+  })[path] then
+    ServeAsset(path)
+    return true
+  end
+
+  local param = GetParam("skin")
+  if param then
+    SetStatus("302")
+    SetHeader("Location", "/planning-poker/")
+    SetCookie("skin", param, {MaxAge=999888777, HttpOnly=true, SameSite="Strict"})
+    return true
+  end
+
+  local skin = GetCookie("skin")
+  if not skin or skin == "" then
+    ServeAsset("frontend-switch.html")
+    return true
+  end
+
+  local mapping = skinPathMap[skin]
+  if not mapping then
+    SetStatus("302")
+    SetHeader("Location", "/planning-poker/")
+    SetCookie("skin", "")
+    return true
+  end
+
+  local destination = mapping[path]
+  if destination then
+    ServeAsset(destination)
+    return true
+  end
+
+  return false
+end
+
 function OnHttpRequest()
   if RedirectHttp() then
     return
@@ -381,15 +433,7 @@ function OnHttpRequest()
   path = match
 
   if ServeApi(path) then
-    -- already done
-  elseif path == "/" then
-    ServeAsset("index.html")
-  elseif toSet({
-    "/favicon.ico",
-    "/main.css",
-    "/main.js",
-  })[path] then
-    ServeAsset(path)
+  elseif ServeFrontend(path) then
   else
     SetStatus(404)
     Write("<h1>Not found</h1>")

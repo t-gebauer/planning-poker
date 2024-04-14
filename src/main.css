@@ -43,7 +43,7 @@ button {
   height: 40px;
   border: 1px solid #888;
   border-radius: 10px;
-  background: var(--primary-contrast);
+  background-color: var(--primary-contrast);
   color: var(--primary);
   font-size: larger;
 }

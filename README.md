@@ -19,7 +19,8 @@ Then visit http://localhost:8080/planning-poker/
 
 ### Docs
 
-https://redbean.dev
+- [redbean](https://redbean.dev) - single file distributable web server
+- [Hyperapp](https://github.com/jorgebucaran/hyperapp/) - tiny framework for hypertext applications
 
 ### IPC: shared memory
 
