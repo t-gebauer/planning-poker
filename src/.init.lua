@@ -369,6 +369,7 @@ local skinPathMap = {
     ["/hyperapp.js"] = "hyperapp/hyperapp-2.0.22.js",
   },
 }
+local defaultSkin = "hyperapp"
 
 function ServeFrontend(path)
   if toSet({
@@ -379,25 +380,21 @@ function ServeFrontend(path)
     return true
   end
 
-  local param = GetParam("skin")
-  if param then
-    SetStatus("302")
-    SetHeader("Location", "/planning-poker/")
-    SetCookie("skin", param, {MaxAge=999888777, HttpOnly=true, SameSite="Strict"})
-    return true
-  end
-
-  local skin = GetCookie("skin")
-  if not skin or skin == "" then
-    ServeAsset("frontend-switch.html")
-    return true
+  local skin = GetParam("skin") or GetCookie("skin")
+  if not skin then
+    skin = defaultSkin
   end
 
   local mapping = skinPathMap[skin]
   if not mapping then
+    ServeAsset("frontend-switch.html")
+    return true
+  end
+
+  if GetCookie("skin") ~= skin then
     SetStatus("302")
     SetHeader("Location", "/planning-poker/")
-    SetCookie("skin", "")
+    SetCookie("skin", skin, {MaxAge=999888777, HttpOnly=true, SameSite="Strict"})
     return true
   end
 
