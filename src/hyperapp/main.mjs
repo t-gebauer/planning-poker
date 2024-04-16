@@ -44,35 +44,39 @@ const RegisterError = (state, errorMessage) => ({
   registerErrorMessage: errorMessage
 })
 
+const register = (dispatch, name) => {
+  fetch('register', {
+    method: 'POST',
+    body: JSON.stringify({
+      username: name,
+    }),
+  }).then(res => {
+    if (!res.ok) {
+      return Promise.reject(res);4
+    }
+  }).catch((error) => {
+    if (typeof error.json === "function") {
+      error.json().then(json => {
+        if (json.error) {
+          dispatch(RegisterError, json.error)
+        } else {
+          dispatch(RegisterError, "Unknown error")
+        }
+      }).catch(err => {
+        dispatch(RegisterError, "Unknown error")
+      })
+    } else {
+      dispatch(RegisterError, "Unknown error")
+    }
+  })
+}
+
 const Register = state => {
   const input = document.getElementById("register-input")
   const name = input.value
-  if (name.trim() === "") {
-    return state
-  }
-  return [state,
-    dispatch => fetch('register', {
-      method: 'POST',
-      body: JSON.stringify({
-        username: name,
-      }),
-    }).then(res => {
-      if (!res.ok) {
-        return Promise.reject(res);
-      }
-    }).catch((error) => {
-      if (typeof error.json === "function") {
-        error.json().then(json => {
-          if (json.error) {
-            dispatch(RegisterError, json.error)
-          } else {
-            dispatch(RegisterError, "Unknown error")
-          }
-        });
-      } else {
-        dispatch(RegisterError, "Unknown error")
-      }
-    })
+  return [
+    state,
+    (name.trim() !== "") && [register, name]
   ]
 }
 
@@ -140,7 +144,7 @@ fetchStatus(0).then(initialStatus => {
             h("div", {
               class: { card: true, selectable: true, selected: value === state.selectedCard },
               onclick: (state, ev) => ev.target.disabled ? state : [ChooseCard, value],
-              disabled: state.result,
+              disabled: state.result != null,
               title: value === "☕" ? "Hot beverage" : undefined,
             }, text(value))))
     ]),
