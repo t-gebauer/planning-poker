@@ -141,7 +141,7 @@ fetchStatus(0).then(initialStatus => {
               class: { card: true, selectable: true, selected: value === state.selectedCard },
               onclick: (state, ev) => ev.target.disabled ? state : [ChooseCard, value],
               disabled: state.result,
-              title: value === "☕" && "Hot beverage",
+              title: value === "☕" ? "Hot beverage" : undefined,
             }, text(value))))
     ]),
     node: document.getElementById("app"),
