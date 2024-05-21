@@ -52,7 +52,7 @@ const register = (dispatch, name) => {
     }),
   }).then(res => {
     if (!res.ok) {
-      return Promise.reject(res);4
+      return Promise.reject(res);
     }
   }).catch((error) => {
     if (typeof error.json === "function") {
@@ -62,7 +62,7 @@ const register = (dispatch, name) => {
         } else {
           dispatch(RegisterError, "Unknown error")
         }
-      }).catch(err => {
+      }).catch(() => {
         dispatch(RegisterError, "Unknown error")
       })
     } else {
